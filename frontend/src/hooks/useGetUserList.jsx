@@ -3,7 +3,7 @@ import React from "react";
 import { useEffect } from "react";
 import { ADMIN_API_END_POINT } from "../utils/constants";
 import { useDispatch } from "react-redux";
-import { setUserList } from "@/redux/UserListSlice.js";
+import { setUserList } from "@/redux/UserListSlice";
 
 const useGetUserList = () => {
   const dispatch = useDispatch();

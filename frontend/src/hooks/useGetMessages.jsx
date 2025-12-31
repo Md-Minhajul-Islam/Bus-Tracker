@@ -3,7 +3,7 @@ import React from "react";
 import { useEffect } from "react";
 import { MESSAGE_API_END_POINT } from "../utils/constants";
 import { useDispatch } from "react-redux";
-import { setMessages } from "@/redux/messageSlice.js";
+import { setMessages } from "@/redux/messageSlice";
 
 const useGetMessages = () => {
   const dispatch = useDispatch();
