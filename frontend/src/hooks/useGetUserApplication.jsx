@@ -3,7 +3,7 @@ import React from "react";
 import { useEffect } from "react";
 import { ADMIN_API_END_POINT } from "../utils/constants";
 import { useDispatch } from "react-redux";
-import { setUserApplication } from "@/redux/UserApplicationSlice.js";
+import { setUserApplication } from "@/redux/UserApplicationSlice";
 
 const useGetUserApplication = () => {
   const dispatch = useDispatch();
