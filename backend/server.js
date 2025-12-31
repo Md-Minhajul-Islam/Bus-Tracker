@@ -31,7 +31,7 @@ const PORT = process.env.PORT || 5000;
 // Socket initialization
 const io = new Server(server, {
   cors: {
-    origin: ["http://localhost:5173"],
+    origin: ["http://localhost:5173", "https://bus-tracker-s3sn.onrender.com"],
     methods: ["GET", "POST"],
     credentials: true,
   },
