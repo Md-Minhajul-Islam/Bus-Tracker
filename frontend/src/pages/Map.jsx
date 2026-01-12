@@ -71,6 +71,9 @@ const MapView = () => {
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
         {allLocations?.map((obj, index) => {
+
+          if (!obj?.locations || obj.locations.length === 0) return null;
+
           const currentPosition = obj?.locations[obj?.locations?.length - 1];
           return (
             <React.Fragment key={index}>
