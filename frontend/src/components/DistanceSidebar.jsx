@@ -14,9 +14,21 @@ const DistanceSidebar = () => {
   const [busesWithDistance, setBusesWithDistance] = useState([]);
 
   useEffect(() => {
+    if (!userLocation || userLocation.length < 2) return;
+    if (!Array.isArray(allLocations)) return;
+
     const busesWithDistance = allLocations
-      ?.map((obj) => {
+      .map((obj) => {
         if (obj?.sender?.role !== "driver" || obj?.sender?._id === user?._id) {
+          return null;
+        }
+
+        if (!Array.isArray(obj?.locations) || obj.locations.length === 0) {
+          return null;
+        }
+        const lastLocation = obj.locations[obj.locations.length - 1];
+
+        if (!Array.isArray(lastLocation) || lastLocation.length < 2) {
           return null;
         }
 
@@ -24,8 +36,8 @@ const DistanceSidebar = () => {
           getDistance(
             userLocation[0],
             userLocation[1],
-            obj?.locations[obj?.locations?.length - 1][0],
-            obj?.locations[obj?.locations?.length - 1][1]
+            lastLocation[0],
+            lastLocation[1]
           ) / 1000;
 
         return {
@@ -37,7 +49,7 @@ const DistanceSidebar = () => {
       .sort((a, b) => a.distance - b.distance);
 
     setBusesWithDistance(busesWithDistance);
-  }, [location, allLocations, user?._id]);
+  }, [userLocation, allLocations, user?._id]);
 
   return (
     <>
@@ -100,9 +112,7 @@ const DistanceSidebar = () => {
                       <Bus
                         size={18}
                         className={
-                          bus.distance < 0.5
-                            ? "text-white"
-                            : "text-slate-600"
+                          bus.distance < 0.5 ? "text-white" : "text-slate-600"
                         }
                       />
                     </div>
