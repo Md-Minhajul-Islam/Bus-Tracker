@@ -192,6 +192,7 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
                   name="currentPassword"
                   type="password"
                   icon={Pen}
+                  autoComplete="off"
                   value={input.currentPassword}
                   onChange={changeHandler}
                 />
