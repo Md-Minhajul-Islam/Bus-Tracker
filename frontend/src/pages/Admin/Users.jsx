@@ -121,7 +121,7 @@ const Users = () => {
                         <img
                           src={user?.idPhoto || photo}
                           alt="ID"
-                          className="min-h-16 min-w-16 md:h-20 md:w-20 rounded-lg object-cover border cursor-pointer hover:scale-105 transition"
+                          className="h-16 w-16 md:h-20 md:w-20 rounded-lg object-cover border cursor-pointer hover:scale-105 transition"
                         />
                       </DialogTrigger>
 
@@ -131,7 +131,7 @@ const Users = () => {
                           <img
                             src={user?.idPhoto || photo}
                             alt="ID Large"
-                            className="max-w-full rounded-xl object-contain border"
+                            className="max-w-full max-h-120 rounded-xl object-contain border"
                           />
                         </div>
                       </DialogContent>
