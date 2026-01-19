@@ -13,7 +13,7 @@ const locationSlice = createSlice({
       const { sender, locations } = action.payload;
 
       const existing = state.allLocations.find(
-        (item) => item?.sender?._id === sender?._id
+        (item) => item?.sender?._id === sender?._id,
       );
 
       if (existing) {
@@ -22,8 +22,14 @@ const locationSlice = createSlice({
         state.allLocations.push(action.payload);
       }
     },
+    removeLocation: (state, action) => {
+      state.allLocations = state.allLocations.filter(
+        (item) => item?.sender?._id !== action.payload,
+      );
+    },
   },
 });
 
-export const { setLocation, updateLocation } = locationSlice.actions;
+export const { setLocation, updateLocation, removeLocation } =
+  locationSlice.actions;
 export default locationSlice.reducer;

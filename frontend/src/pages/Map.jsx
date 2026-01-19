@@ -18,8 +18,8 @@ import { updateLocation } from "@/redux/locationSlice";
 import { socket } from "../socket/socket";
 import DistanceSidebar from "../components/DistanceSidebar";
 import L from "leaflet";
+import { removeLocation } from "../redux/locationSlice";
 
-const center = [22.3476, 91.8223]; // Chattogram
 
 const MapView = () => {
   useConnectSocket();
@@ -33,11 +33,18 @@ const MapView = () => {
       dispatch(updateLocation(newLocation));
     };
 
+    const handleRemoveLocation = (sender) => {
+      dispatch(removeLocation(sender));
+    };
+
     socket.on("receive_location", handleReceive);
+    socket.on("remove_location", handleRemoveLocation);
 
     return () => socket.off("receive_location", handleReceive);
   }, [dispatch]);
 
+  const { userLocation } = useSelector((store) => store.auth);
+  const center = userLocation || [22.3476, 91.8223]; // Chattogram
   const { allLocations } = useSelector((store) => store.location);
   const { user } = useSelector((store) => store.auth);
 
@@ -64,14 +71,13 @@ const MapView = () => {
       {/* MAP */}
       <MapContainer
         center={center}
-        zoom={13}
+        zoom={15}
         zoomControl={false}
         className="w-full h-full z-0"
       >
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
         {allLocations?.map((obj, index) => {
-
           if (!obj?.locations || obj.locations.length === 0) return null;
 
           const currentPosition = obj?.locations[obj?.locations?.length - 1];

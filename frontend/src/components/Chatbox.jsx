@@ -51,7 +51,7 @@ export default function Chatbox() {
         { text: message },
         {
           withCredentials: true,
-        }
+        },
       );
       setMessage("");
     } catch (error) {
@@ -65,8 +65,8 @@ export default function Chatbox() {
       {/* Floating Button */}
       <PopoverTrigger asChild>
         <Button
-          className="
-            absolute bottom-6 right-4 md:right-15 z-1000
+          className="fixed z-1000
+            bottom-6 right-4 md:right-15
             w-10 h-10 rounded-full
             bg-indigo-600 hover:bg-indigo-700
             cursor-pointer
@@ -81,7 +81,7 @@ export default function Chatbox() {
         align="end"
         sideOffset={5}
         className="
-          w-[340px] p-0
+          w-[300px] p-0 md:w-[340px]
           bg-slate-900/95 backdrop-blur
           border border-slate-800
           rounded-2xl

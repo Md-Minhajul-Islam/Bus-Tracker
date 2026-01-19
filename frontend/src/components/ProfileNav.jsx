@@ -14,7 +14,7 @@ const ProfileCard = () => {
 
 
   return (
-    <div className="absolute top-4 right-4 md:right-10 z-1000">
+    <div className="fixed top-4 right-4 md:right-10 z-1000">
       <Popover>
         <PopoverTrigger asChild>
           <Avatar className="md:w-10 md:h-10 cursor-pointer ring-2 ring-indigo-400 hover:ring-[#6A38C2] transition">
