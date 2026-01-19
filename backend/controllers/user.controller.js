@@ -6,6 +6,7 @@ import getDataUri from "../utils/datauri.js";
 import cloudinary from "../utils/cloudinary.js";
 import UserApplication from "../models/userapplication.model.js";
 import Location from "../models/location.model.js";
+import { getIO } from "../SocketIO/socket.js";
 
 export async function signup(req, res, next) {
   try {
@@ -51,7 +52,7 @@ export async function signup(req, res, next) {
     });
 
     res.status(201).json({
-      message: "Account created successfully.",
+      message: "Request received. Please wait for confirmation.",
       success: true,
     });
   } catch (err) {
@@ -124,6 +125,9 @@ export async function logout(req, res, next) {
 
     await Location.deleteOne({ sender });
 
+    const io = getIO();
+    io.emit("remove_location", sender);
+
     res.status(200).cookie("token", "", { maxAge: 0 }).json({
       message: "Logged out successfully.",
       success: true,
@@ -190,7 +194,7 @@ export async function updateProfile(req, res, next) {
     if (currentPassword && newPassword && newPassword === confirmPassword) {
       const isPasswordMatch = await bcrypt.compare(
         currentPassword,
-        user.password
+        user.password,
       );
       if (!isPasswordMatch) {
         throw createError("Incorrect email or password.", 400);
@@ -248,6 +252,10 @@ export async function removeUser(req, res, next) {
     }
 
     user = await User.findByIdAndDelete(userId);
+
+    const io = getIO();
+    io.emit("remove_location", userId);
+
     res.status(200).json({
       success: true,
       message: "Account deleted successfully",
