@@ -116,7 +116,7 @@ const UserApplications = () => {
                         <img
                           src={app?.idPhoto}
                           alt="ID"
-                          className="h-16 w-16 md:h-20 md:w-20 rounded-lg object-cover border cursor-pointer hover:scale-105 transition"
+                          className="min-h-16 min-w-16 max-h-16 max-w-16 md:h-20 md:w-20 rounded-lg object-cover border cursor-pointer hover:scale-105 transition"
                         />
                       </DialogTrigger>
 

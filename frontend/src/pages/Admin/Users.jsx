@@ -49,7 +49,7 @@ const Users = () => {
         { userId: applicationId },
         {
           withCredentials: true,
-        }
+        },
       );
       if (res.data.success) {
         dispatch(removeUser(applicationId));
@@ -65,7 +65,9 @@ const Users = () => {
       <Navbar />
 
       <div className="p-1 md:p-10">
-        <h1 className="text-xl md:text-2xl font-bold text-slate-800 mb-6">Users</h1>
+        <h1 className="text-xl md:text-2xl font-bold text-slate-800 mb-6">
+          Users
+        </h1>
 
         <div className="bg-white rounded-md  md:rounded-xl shadow-md overflow-x-auto">
           <Table>
@@ -121,7 +123,7 @@ const Users = () => {
                         <img
                           src={user?.idPhoto || photo}
                           alt="ID"
-                          className="h-16 w-16 md:h-20 md:w-20 rounded-lg object-cover border cursor-pointer hover:scale-105 transition"
+                          className="min-h-16 min-w-16 max-h-16 max-w-16 md:h-20 md:w-20 rounded-lg object-cover border cursor-pointer hover:scale-105 transition"
                         />
                       </DialogTrigger>
 
