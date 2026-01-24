@@ -90,6 +90,8 @@ export async function login(req, res, next) {
       expiresIn: "1d",
     });
 
+    await Location.deleteOne({ sender: user._id });
+
     user = {
       _id: user._id,
       fullname: user.fullname,
@@ -99,6 +101,7 @@ export async function login(req, res, next) {
       profilePhoto: user.profilePhoto,
       id: user.id,
       address: user.address,
+      route: user.route,
     };
 
     res
@@ -145,6 +148,7 @@ export async function updateProfile(req, res, next) {
       phoneNumber,
       id,
       address,
+      route,
       currentPassword,
       newPassword,
       confirmPassword,
@@ -203,6 +207,31 @@ export async function updateProfile(req, res, next) {
       user.password = hashedPassword;
     }
 
+    if (route !== undefined) {
+      if (typeof route !== "string") {
+        throw createError("Route must be a comma-separated string", 400);
+      }
+
+      const routeArray = route
+        .split(",")
+        .map((r) => r.trim())
+        .filter(Boolean)
+        .map((r) => {
+          const num = Number(r);
+
+          if (isNaN(num)) {
+            throw createError(
+              `Invalid route value "${r}". Route must contain only numbers.`,
+              400,
+            );
+          }
+
+          return num;
+        });
+
+      user.route = routeArray;
+    }
+
     await user.save();
     user = {
       _id: user._id,
@@ -213,6 +242,7 @@ export async function updateProfile(req, res, next) {
       address: user.address,
       id: user.id,
       profilePhoto: user.profilePhoto,
+      route: user.route,
     };
 
     res.status(200).json({
@@ -264,3 +294,4 @@ export async function removeUser(req, res, next) {
     next(error);
   }
 }
+

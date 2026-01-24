@@ -1,10 +1,11 @@
 import { Router } from "express";
-import { updateLocation, getLocation } from "../controllers/location.controller.js";
+import { updateLocation, getLocation, sendLocationMail } from "../controllers/location.controller.js";
+import isAuthenticated from "../middlewares/common/isAuthenticated.js";
 
 const router = Router();
 
-router.get('/', getLocation);
-router.post('/', updateLocation);
-
+router.get('/', isAuthenticated, getLocation);
+router.post('/', isAuthenticated, updateLocation);
+router.post("/send-location-mail", isAuthenticated, sendLocationMail);
 
 export default router;

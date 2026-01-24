@@ -42,7 +42,10 @@ const userSchema = new mongoose.Schema(
     address: {
       type: String,
     },
+    route: {
+      type: [Number],
+    },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 export default mongoose.model("User", userSchema);

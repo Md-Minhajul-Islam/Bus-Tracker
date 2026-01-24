@@ -2,6 +2,7 @@ import { createError } from "../middlewares/common/errorHandler.js";
 import Admin from "../models/admin.model.js";
 import User from "../models/user.model.js";
 import UserApplication from "../models/userapplication.model.js";
+import Route from "../models/route.model.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import cloudinary from "../utils/cloudinary.js";
@@ -234,6 +235,237 @@ export async function removeUser(req, res, next) {
     res.status(200).json({
       success: true,
       message: "Account deleted successfully",
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+// Route
+export async function getRoutes(req, res, next) {
+  try {
+    const routes = await Route.find();
+
+    res.status(200).json({
+      success: true,
+      data: routes,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function createRoute(req, res, next) {
+  try {
+    let { no, route, color, routeLocation, stopLocation } = req.body;
+    no = no?.trim();
+    route = route?.trim();
+    color = color?.trim();
+
+    if (no === undefined || no === null || isNaN(Number(no))) {
+      throw createError("Route number must be a valid number", 400);
+    }
+    no = Number(no);
+
+    const existsRoute = await Route.findOne({ no });
+    if (existsRoute) {
+      throw createError("Route number already  exists.", 400);
+    }
+
+    if (!route || typeof route !== "string") {
+      throw createError("Route must be a comma-separated string", 400);
+    }
+
+    const routeArray = route
+      .split(",")
+      .map((r) => r.trim())
+      .filter(Boolean); // removes empty strings
+
+    if (!routeArray || routeArray?.length < 2) {
+      throw createError("Route must have atleast two points.", 400);
+    }
+    if (!color || typeof color !== "string") {
+      throw createError("Color is required.", 400);
+    }
+
+    // Check if routeLocation is an array containing a JSON string
+
+    const isValidArray = (arr) =>
+      Array.isArray(arr) &&
+      arr.every(
+        (inner) =>
+          Array.isArray(inner) &&
+          inner.length === 2 &&
+          inner.every(Number.isFinite),
+      );
+
+    if (routeLocation && typeof routeLocation === "string") {
+      routeLocation = JSON.parse(routeLocation);
+
+      if (
+        Array.isArray(routeLocation) &&
+        routeLocation.length > 0 &&
+        typeof routeLocation[0] === "string"
+      ) {
+        routeLocation = JSON.parse(routeLocation[0]);
+      }
+      if (!isValidArray(routeLocation)) {
+        throw createError("Invalid coordinates format", 400);
+      }
+    }
+    if (stopLocation && typeof stopLocation === "string") {
+      stopLocation = JSON.parse(stopLocation);
+
+      if (
+        Array.isArray(stopLocation) &&
+        stopLocation.length > 0 &&
+        typeof stopLocation[0] === "string"
+      ) {
+        stopLocation = JSON.parse(stopLocation[0]);
+      }
+      if (!isValidArray(stopLocation)) {
+        throw createError("Invalid coordinates format", 400);
+      }
+    }
+
+    const newRoute = await Route.create({
+      no,
+      route: routeArray,
+      color,
+      routeLocation,
+      stopLocation,
+    });
+
+    res.status(201).json({
+      success: true,
+      message: "Route created successfully",
+      data: newRoute,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function updateRoute(req, res, next) {
+  try {
+    let { id, no, route, color, routeLocation, stopLocation } = req.body;
+
+    const existingRoute = await Route.findById(id);
+    if (!existingRoute) {
+      throw createError("Route not found", 404);
+    }
+
+    if (no !== undefined) {
+      if (isNaN(Number(no))) {
+        throw createError("Route number must be a valid number", 400);
+      }
+
+      const numberExists = await Route.findOne({
+        no: Number(no),
+        _id: { $ne: id },
+      });
+
+      if (numberExists) {
+        throw createError("Route number already exists", 409);
+      }
+
+      existingRoute.no = Number(no);
+    }
+
+    if (route !== undefined) {
+      if (typeof route !== "string") {
+        throw createError("Route must be a comma-separated string", 400);
+      }
+
+      const routeArray = route
+        .split(",")
+        .map((r) => r.trim())
+        .filter(Boolean);
+
+      if (routeArray.length < 2) {
+        throw createError("Route must have at least two points.", 400);
+      }
+
+      existingRoute.route = routeArray;
+    }
+
+    if (color !== undefined) {
+      color = color?.trim();
+      existingRoute.color = color;
+    }
+
+    // Check if routeLocation is an array containing a JSON string
+
+    const isValidArray = (arr) =>
+      Array.isArray(arr) &&
+      arr.every(
+        (inner) =>
+          Array.isArray(inner) &&
+          inner.length === 2 &&
+          inner.every(Number.isFinite),
+      );
+
+    if (routeLocation && typeof routeLocation === "string") {
+      routeLocation = JSON.parse(routeLocation);
+
+      if (
+        Array.isArray(routeLocation) &&
+        routeLocation.length > 0 &&
+        typeof routeLocation[0] === "string"
+      ) {
+        routeLocation = JSON.parse(routeLocation[0]);
+      }
+      if (!isValidArray(routeLocation)) {
+        throw createError("Invalid coordinates format", 400);
+      }
+
+      existingRoute.routeLocation = routeLocation;
+    }
+    if (stopLocation && typeof stopLocation === "string") {
+      stopLocation = JSON.parse(stopLocation);
+
+      if (
+        Array.isArray(stopLocation) &&
+        stopLocation.length > 0 &&
+        typeof stopLocation[0] === "string"
+      ) {
+        stopLocation = JSON.parse(stopLocation[0]);
+      }
+      if (!isValidArray(stopLocation)) {
+        throw createError("Invalid coordinates format", 400);
+      }
+      existingRoute.stopLocation = stopLocation;
+    }
+
+    await existingRoute.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Route updated successfully",
+      data: existingRoute,
+    });
+  } catch (error) {
+    console.log(error.message);
+    next(error);
+  }
+}
+
+export async function removeRoute(req, res, next) {
+  try {
+    const { id } = req.body;
+
+    const deletedRoute = await Route.findByIdAndDelete(id);
+
+    if (!deletedRoute) {
+      return res.status(404).json({
+        success: false,
+        message: "Route not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Route deleted successfully",
     });
   } catch (error) {
     next(error);
