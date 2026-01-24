@@ -29,9 +29,9 @@ export default function HeroSection() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <h1 className="text-4xl md:text-6xl font-bold leading-tight">
-            Real‑Time <span className="text-indigo-400">Location</span>
-            <br /> Tracking System
+          <h1 className="text-3xl md:text-6xl font-bold leading-tight">
+            <span className="text-indigo-400">BGC</span>
+            <br />Bus Tracking System
           </h1>
           <p className="mt-6 text-slate-300 text-lg max-w-xl">
             Track buses, routes, and live movement with precision. Built with

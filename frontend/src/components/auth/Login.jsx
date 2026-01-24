@@ -33,10 +33,11 @@ const Login = () => {
         withCredentials: true,
       });
 
-      if (res.data.success) {
-        dispatch(setUser(res.data.user));
-        toast.success(res.data.message);
-        navigate("/map");
+      if (res?.data?.success) {
+        dispatch(setUser(res?.data?.user));
+        toast.success(res?.data?.message);
+        if (res?.data?.user?.role?.toLowerCase() === 'driver') navigate('/selectRoute');
+        else if(res?.data?.user?.role?.toLowerCase() === 'student') navigate("/map");
       }
     } catch (error) {
       toast.error(error.response?.data?.message || "Login failed");

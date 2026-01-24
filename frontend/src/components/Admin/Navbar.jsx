@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { LogOut, Users, FileText, Menu, X, ShieldCheck } from "lucide-react";
+import { LogOut, Users, FileText, Menu, X, ShieldCheck, Route } from "lucide-react";
 import { useDispatch } from "react-redux";
 import { setUser } from "@/redux/authSlice";
 import { toast } from "sonner";
@@ -58,6 +58,13 @@ const Navbar = () => {
           <Users size={16} /> Users
         </Link>
 
+        <Link
+          to="/admin/routes"
+          className="flex items-center gap-1 px-4 py-2 rounded-lg hover:bg-indigo-50 text-slate-700 font-medium"
+        >
+          <Route size={16} /> Routes
+        </Link>
+
         <Button
           variant="ghost"
           className="flex items-center gap-1 text-red-500 hover:bg-red-50"
@@ -93,6 +100,14 @@ const Navbar = () => {
             className="flex items-center gap-2 px-4 py-3 hover:bg-indigo-50 text-slate-700 font-medium rounded-lg transition"
           >
             <Users size={16} /> Users
+          </Link>
+
+          <Link
+            to="/admin/routes"
+            onClick={() => setMenuOpen(false)}
+            className="flex items-center gap-2 px-4 py-3 hover:bg-indigo-50 text-slate-700 font-medium rounded-lg transition"
+          >
+            <Route size={16} /> Routes
           </Link>
 
           <Button

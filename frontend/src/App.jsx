@@ -8,6 +8,8 @@ import AdminLogin from "./components/Admin/auth/Login";
 import Dashboard from "./pages/Admin/Dashboard";
 import UserApplications from "./pages/Admin/UserApplications";
 import Users from "./pages/Admin/Users";
+import BusRoutes from "./pages/Admin/BusRoutes";
+import SelectRoute from "./pages/SelectRoute";
 
 function App() {
   return (
@@ -16,6 +18,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/selectRoute" element={<SelectRoute />} />
         <Route path="/map" element={<Map />} />
         <Route path="/profile" element={<Profile />} />
 
@@ -23,7 +26,8 @@ function App() {
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route path="/admin/dashboard" element={<Dashboard />} />
         <Route path="/admin/userapplications" element={<UserApplications />} />
-        <Route path="/admin/users" element={<Users/>} />
+        <Route path="/admin/users" element={<Users />} />
+        <Route path="/admin/routes" element={<BusRoutes />} />
       </Routes>
     </div>
   );

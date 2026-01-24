@@ -3,15 +3,25 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
-import { Bus, MapPin, X } from "lucide-react";
+import { Bus, MapPin, Route, X } from "lucide-react";
 import getDistance from "@/utils/getDistance";
 import { useEffect, useState } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Map } from "lucide-react";
 
 const DistanceSidebar = () => {
   const { allLocations } = useSelector((store) => store.location);
   const { user, userLocation } = useSelector((store) => store.auth);
   const [open, setOpen] = useState(false);
   const [busesWithDistance, setBusesWithDistance] = useState([]);
+  const [routesOpen, setRoutesOpen] = useState(false);
+
+  const { routes } = useSelector((store) => store.routes);
 
   useEffect(() => {
     if (!userLocation || userLocation.length < 2) return;
@@ -23,12 +33,12 @@ const DistanceSidebar = () => {
           return null;
         }
 
-        if (!Array.isArray(obj?.locations) || obj.locations.length === 0) {
+        if (!Array.isArray(obj?.locations) || obj.locations?.length === 0) {
           return null;
         }
-        const lastLocation = obj.locations[obj.locations.length - 1];
+        const lastLocation = obj?.locations[obj.locations.length - 1];
 
-        if (!Array.isArray(lastLocation) || lastLocation.length < 2) {
+        if (!Array.isArray(lastLocation) || lastLocation?.length < 2) {
           return null;
         }
 
@@ -37,7 +47,7 @@ const DistanceSidebar = () => {
             userLocation[0],
             userLocation[1],
             lastLocation[0],
-            lastLocation[1]
+            lastLocation[1],
           ) / 1000;
 
         return {
@@ -50,6 +60,8 @@ const DistanceSidebar = () => {
 
     setBusesWithDistance(busesWithDistance);
   }, [userLocation, allLocations, user?._id]);
+
+
 
   return (
     <>
@@ -69,7 +81,7 @@ const DistanceSidebar = () => {
           ${open ? "translate-x-0" : "-translate-x-full"}
         `}
       >
-        <div className="px-6 py-4 border-b flex items-center justify-between">
+        <div className="px-6 py-4 border-b flex items-center justify-between gap-2">
           <div>
             <h2 className="text-lg font-semibold">Nearby Buses</h2>
             <p className="text-xs text-muted-foreground">
@@ -77,14 +89,26 @@ const DistanceSidebar = () => {
             </p>
           </div>
 
-          <Button
-            size="icon"
-            variant="ghost"
-            onClick={() => setOpen(false)}
-            className="rounded-full hover:bg-slate-200 hover:text-red-500"
-          >
-            <X size={18} />
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => setRoutesOpen(true)}
+              className="rounded-full text-xs"
+            >
+              <Route size={14} className="mr-1" />
+              Routes
+            </Button>
+
+            <Button
+              size="icon"
+              variant="ghost"
+              onClick={() => setOpen(false)}
+              className="rounded-full hover:bg-slate-200 hover:text-red-500"
+            >
+              <X size={18} />
+            </Button>
+          </div>
         </div>
 
         <ScrollArea className="h-[calc(100vh-80px)] px-5 py-4">
@@ -105,15 +129,17 @@ const DistanceSidebar = () => {
                 <CardContent className="p-2 flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div
-                      className={`h-10 w-10 rounded-xl flex items-center justify-center
-                        ${bus.distance < 0.5 ? "bg-green-500" : "bg-slate-100"}
-                      `}
+                      className="h-10 w-10 rounded-xl flex items-center justify-center"
+                      style={{
+                        backgroundColor:
+                          bus?.distance < 0.5
+                            ? "#22C55E"
+                            : bus?.color || "#E2E8F0",
+                      }}
                     >
                       <Bus
                         size={18}
-                        className={
-                          bus.distance < 0.5 ? "text-white" : "text-slate-600"
-                        }
+                        className="text-white"
                       />
                     </div>
 
@@ -142,6 +168,52 @@ const DistanceSidebar = () => {
           </div>
         </ScrollArea>
       </aside>
+
+      <Dialog open={routesOpen} onOpenChange={setRoutesOpen}>
+        <DialogContent
+          className="w-full
+    sm:max-w-md md:max-w-lg max-h-[80vh] overflow-auto rounded-2xl p-2"
+        >
+          <DialogHeader>
+            <DialogTitle className="text-lg font-semibold flex items-center gap-2 p-2">
+              <Route size={18} /> All Routes
+            </DialogTitle>
+          </DialogHeader>
+
+          <div className="space-y-2 mt-2">
+            {routes?.length === 0 && (
+              <p className="text-center text-white text-sm">
+                No routes available
+              </p>
+            )}
+
+            {routes?.map((route) => (
+              <div
+                key={route?._id}
+                className="text-white border rounded-xl p-3 hover:shadow-sm transition "
+                style={{ backgroundColor: route?.color }}
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="font-medium text-sm">Route {route?.no}</h3>
+                </div>
+
+                <div className="flex flex-wrap items-center text-xs text-slate-600">
+                  {route?.route?.map((stop, i) => (
+                    <span key={i} className="flex items-center mb-2">
+                      <span className="px-2 py-1 bg-slate-100 rounded-md">
+                        {stop}
+                      </span>
+                      {i !== route?.route?.length - 1 && (
+                        <span className="mx-0.5 text-white">→</span>
+                      )}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </DialogContent>
+      </Dialog>
 
       <Button
         onClick={() => setOpen(!open)}

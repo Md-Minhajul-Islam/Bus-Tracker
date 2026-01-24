@@ -20,6 +20,7 @@ import {
   Mail,
   Pen,
   Lock,
+  Route,
 } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
@@ -37,6 +38,7 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
     phoneNumber: user?.phoneNumber || "",
     id: user?.id || "",
     address: user?.address || "",
+    route: user?.route || "",
     currentPassword: "",
     newPassword: "",
     confirmPassword: "",
@@ -71,7 +73,7 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
       const res = await axios.post(
         `${USER_API_END_POINT}/profile/update`,
         formData,
-        { withCredentials: true }
+        { withCredentials: true },
       );
 
       if (res.data.success) {
@@ -113,7 +115,6 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
         </DialogHeader>
 
         <form onSubmit={submitHandler} className="space-y-4 mt-4">
-          {/* Name */}
           <InputField
             icon={Pen}
             label="Full Name"
@@ -122,7 +123,6 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
             onChange={changeHandler}
           />
 
-          {/* Email */}
           <InputField
             icon={Mail}
             label="Email"
@@ -132,7 +132,6 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
             onChange={changeHandler}
           />
 
-          {/* Phone */}
           <InputField
             icon={Phone}
             label="Phone Number"
@@ -141,7 +140,6 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
             onChange={changeHandler}
           />
 
-          {/* ID */}
           <InputField
             label="ID"
             name="id"
@@ -150,7 +148,6 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
             onChange={changeHandler}
           />
 
-          {/* Address */}
           <InputField
             label="Address"
             name="address"
@@ -159,7 +156,16 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
             onChange={changeHandler}
           />
 
-          {/* Profile Image */}
+          {user?.role.toLowerCase() === "student" && (
+            <InputField
+              label="Route"
+              name="route"
+              icon={Route}
+              value={input.route}
+              onChange={changeHandler}
+            />
+          )}
+
           <div className="grid grid-cols-3 items-center gap-4">
             <Label className="flex items-center gap-2 text-slate-300 col-span-1">
               <Image size={15} className=" text-indigo-400" /> Profile Photo
@@ -218,7 +224,6 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
             )}
           </div>
 
-          {/* Submit */}
           <Button
             type="submit"
             disabled={loading}

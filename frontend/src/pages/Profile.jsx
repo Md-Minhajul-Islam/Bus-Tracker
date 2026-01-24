@@ -18,6 +18,7 @@ import {
   ArrowBigLeft,
   ArrowLeft,
   LogOut,
+  Route,
 } from "lucide-react";
 import UpdateProfileDialog from "../components/UpdateProfileDialog";
 import profilePhoto from "/user-profile-photo.jpg";
@@ -52,7 +53,6 @@ const Profile = () => {
           </button>
         </div>
 
-        {/* Header */}
         <div className="flex flex-col sm:flex-row justify-between items-center gap-6 mt-10">
           <div className="flex flex-col sm:flex-row items-center gap-6">
             <Avatar className="h-24 w-24 ring-2 ring-indigo-500">
@@ -77,11 +77,10 @@ const Profile = () => {
             >
               <Pen className="h-4 w-4" /> Edit
             </Button>
-            <AlertDialogBox/>
+            <AlertDialogBox />
           </div>
         </div>
 
-        {/* Info Section */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div className="flex items-center gap-3 bg-slate-800/50 p-4 rounded-xl shadow-inner">
             <Mail className="text-indigo-400 h-5 w-5" />
@@ -99,19 +98,13 @@ const Profile = () => {
             <IdCard className="text-indigo-400 h-5 w-5" />
             <span className="text-white">{user?.id || "Id"}</span>
           </div>
-          {user?.role === "student" && (
-            <>
-              <div className="flex items-center gap-3 bg-slate-800/50 p-4 rounded-xl shadow-inner">
-                <GraduationCap className="text-indigo-400 h-5 w-5" />
-                <span className="text-white">
-                  {user?.semester || "Semester"}
-                </span>
-              </div>
-              <div className="flex items-center gap-3 bg-slate-800/50 p-4 rounded-xl shadow-inner">
-                <Calendar className="text-indigo-400 h-5 w-5" />
-                <span className="text-white">{user?.session || "Session"}</span>
-              </div>
-            </>
+          {user?.role?.toLowerCase() === "student" && (
+            <div className="flex items-center gap-3 bg-slate-800/50 p-4 rounded-xl shadow-inner">
+              <Route className="text-indigo-400 h-5 w-5" />
+              <span className="text-white">
+                {user?.route?.join(", ") || "Routes no (comma separated)"}
+              </span>
+            </div>
           )}
         </div>
       </div>

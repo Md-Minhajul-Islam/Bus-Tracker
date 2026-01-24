@@ -15,6 +15,7 @@ import locationSlice from "./locationSlice";
 import messageSlice from "./messageSlice";
 import userApplicationSlice from "./userApplicationSlice";
 import userListSlice from "./userListSlice";
+import routeSlice from "./routeSlice";
 
 const persistConfig = {
   key: "root",
@@ -28,6 +29,7 @@ const appReducer = combineReducers({
   message: messageSlice,
   userApplication: userApplicationSlice,
   userList: userListSlice,
+  routes: routeSlice,
 });
 
 const rootReducer = (state, action) => {

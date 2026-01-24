@@ -4,7 +4,12 @@ import { USER_API_END_POINT } from "../utils/constants.js";
 import { toast } from "sonner";
 import { socket } from "../socket/socket.js";
 import { useDispatch } from "react-redux";
-import { setUser } from "@/redux/authSlice";
+import { setUser, setUserLocation, setRoute } from "@/redux/authSlice";
+import { setUserApplication } from "../redux/userApplicationSlice.js";
+import { setUserList } from "../redux/userListSlice.js";
+import { setRoutes } from "../redux/routeSlice.js";
+import { setMessages } from "../redux/messageSlice.js";
+import { setLocation } from "../redux/locationSlice.js";
 
 const useLogout = () => {
   const navigate = useNavigate();
@@ -19,6 +24,13 @@ const useLogout = () => {
       if (res?.data?.success) {
         socket.disconnect();
         dispatch(setUser(null));
+        dispatch(setUserList([]));
+        dispatch(setUserApplication([]));
+        dispatch(setUserLocation(null));
+        dispatch(setRoute(null));
+        dispatch(setLocation([]));
+        dispatch(setMessages([]));
+        dispatch(setRoutes([]));
         navigate("/");
         toast.success(res.data.message);
       }

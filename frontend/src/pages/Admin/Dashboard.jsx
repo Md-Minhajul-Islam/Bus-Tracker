@@ -1,7 +1,7 @@
 import React from "react";
 import Navbar from "../../components/Admin/Navbar";
 import { Card, CardContent } from "@/components/ui/card";
-import { Users, FileText, MapPin } from "lucide-react";
+import { Users, FileText, MapPin, Route } from "lucide-react";
 
 const Dashboard = () => {
   return (
@@ -46,13 +46,13 @@ const Dashboard = () => {
 
           <Card className="bg-white shadow-md rounded-xl hover:shadow-lg transition">
             <CardContent className="flex items-center gap-4">
-              <MapPin className="h-8 w-8 text-red-500" />
+              <Route className="h-8 w-8 text-red-500" />
               <div>
                 <h3 className="text-lg font-semibold text-slate-800">
-                  Live Tracking
+                  Active Routes
                 </h3>
                 <p className="text-sm text-slate-500 mt-1">
-                  Monitor real-time locations of all users
+                  Manage active routes of the buses
                 </p>
               </div>
             </CardContent>
