@@ -86,7 +86,7 @@ const Login = () => {
             value={input.email}
             name="email"
             onChange={changeEventHandler}
-            placeholder="minhaj@mail.com"
+            placeholder="student@mail.com"
             required
             className="bg-slate-950 border-slate-800 focus:border-indigo-500"
           />
@@ -100,7 +100,7 @@ const Login = () => {
             value={input.password}
             name="password"
             onChange={changeEventHandler}
-            placeholder="••••••••"
+            placeholder="123"
             required
             className="bg-slate-950 border-slate-800 focus:border-indigo-500"
           />
